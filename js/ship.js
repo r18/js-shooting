@@ -19,6 +19,14 @@ Ship.prototype = {
     this.bullets.update();
     if(this.shot && FRAME % 10 == 0)this.bullets.list.push(new Bullet(this.x,this.y,0,-3));
   },
+  n_way_shot:function (n) {
+    n++;
+    for(var i=1;i<n;++i){
+      var theta = Math.PI*i/n*1.0;
+      this.bullets.list.push(new Bullet(
+            this.x,this.y,Math.cos(theta)*4,-Math.sin(theta)*4));
+    }
+  },
   draw:function () {
     ctx.beginPath();
     ctx.moveTo(this.x,this.y);

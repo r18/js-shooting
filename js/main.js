@@ -43,6 +43,7 @@ function init() {
     }
   }
   window.onkeydown= function (e) {
+   console.log(e.keyCode);
     switch(e.keyCode){
       case 38:
         mine.vy = -SHIP_VELOCITY;
@@ -58,6 +59,9 @@ function init() {
         break;
       case 88:
         mine.shot = true;
+        break;
+      case 90:
+        mine.n_way_shot(5);
         break;
       default:
         break;
