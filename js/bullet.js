@@ -12,7 +12,7 @@ Bullet.prototype = {
   x:0,
   y:0,
   vx:0,
-  vy:0,
+  vy:
   ax:0,
   ay:0,
   m:1,
