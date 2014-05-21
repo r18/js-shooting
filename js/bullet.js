@@ -18,17 +18,44 @@ Bullet.prototype = {
   m:1,
   r:10,
   targetTag:"",
+  lifeTime:10,
   update:function () {
-     this.vx += this.ax;
-    this.vy += this.ay;
+   if(this.lifeTime > -1){
     this.x += this.vx; 
     this.y += this.vy; 
+    if(this.x < -10 || this.x > WINDOW_WIDTH || this.y < -10 || this.y > WINDOW_HEIGHT) this.lifeTime = 0;
+    }
+   return this.lifeTime;
+  },
+  check:function () {
 
   },
   draw:function () {
-    ctx.beginPath();
-    ctx.arc(this.x,this.y,this.r,0,Math.PI*2,false);
-    ctx.closePath();
-    ctx.fill();
+    if(this.lifeTime > -1){
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.r,0,Math.PI*2,false);
+      ctx.closePath();
+      ctx.fill();
+    }
+  }
+}
+
+function BulletArray() {
+ 
+}
+
+BulletArray.prototype = {
+  list : [],
+  draw:function () {
+   for(i in this.list){
+      this.list[i].draw();
+   }
+  },
+  update:function () {
+   var cnt = 0;
+   for(i in this.list){
+      cnt += this.list[i].update();
+   }
+   if(cnt == 0)this.list = [];
   }
 }
