@@ -1,10 +1,4 @@
-function Bullet(x,y,vx,vy){
-  this.x = x;
-  this.y = y;
-  this.vx = vx;
-  this.vy = vy;
-  this.ax = 0;
-  this.ay = 0;
+function Bullet(){
 }
 
 Bullet.prototype = {
@@ -20,12 +14,10 @@ Bullet.prototype = {
   targetTag:"",
   lifeTime:10,
   update:function () {
-   if(this.lifeTime > -1){
-    this.x += this.vx; 
-    this.y += this.vy; 
-    if(this.x < -10 || this.x > WINDOW_WIDTH || this.y < -10 || this.y > WINDOW_HEIGHT) this.lifeTime = 0;
+    if(this.lifeTime > -1){
+      if(this.x < -10 || this.x > WINDOW_WIDTH || this.y < -10 || this.y > WINDOW_HEIGHT) this.lifeTime = 0;
     }
-   return this.lifeTime;
+    return this.lifeTime;
   },
   check:function () {
 
@@ -40,22 +32,60 @@ Bullet.prototype = {
   }
 }
 
+function GuidedBullet(x,y,vx,vy,target){
+  this.x = x;
+  this.y = y;
+  this.vx = vx;
+  this.vy = vy;
+  this.target = target;
+}
+GuidedBullet.prototype = new Bullet();
+GuidedBullet.prototype.update = function () {
+  if(this.lifeTime > -1){
+    var dx = this.target.x - this.x;
+    var dy = this.target.y - this.y;
+    this.vx += dx*0.00015;
+    this.vy += dy*0.00015;
+    this.x += this.vx; 
+    this.y += this.vy; 
+    if(this.x < -10 || this.x > WINDOW_WIDTH || this.y < -10 || this.y > WINDOW_HEIGHT) this.lifeTime = -1;
+  }
+  return this.lifeTime;
+}
+
+function MineBullet(x,y,vx,vy){
+  this.x = x;
+  this.y = y;
+  this.vx = vx;
+  this.vy = vy;
+}
+
+MineBullet.prototype = new Bullet();
+MineBullet.prototype.update = function () {
+  if(this.lifeTime > -1){
+    this.x += this.vx; 
+    this.y += this.vy; 
+    if(this.x < -10 || this.x > WINDOW_WIDTH || this.y < -10 || this.y > WINDOW_HEIGHT) this.lifeTime = -1;
+  }
+  return this.lifeTime;
+}
+
+
 function BulletArray() {
- 
 }
 
 BulletArray.prototype = {
   list : [],
   draw:function () {
-   for(i in this.list){
+    for(i in this.list){
       this.list[i].draw();
-   }
+    }
   },
   update:function () {
-   var cnt = 0;
-   for(i in this.list){
+    var cnt = 0;
+    for(i in this.list){
       cnt += this.list[i].update();
-   }
-   if(cnt == 0)this.list = [];
+    }
+    if(cnt == 0)this.list = [];
   }
 }

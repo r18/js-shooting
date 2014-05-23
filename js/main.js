@@ -6,12 +6,17 @@ SHIP_VELOCITY = 2;
 function main(){
   init();
 
+  eBullets = new BulletArray();
   mine = new Ship();
   setInterval(function(){
     ctx.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
     mine.draw();
+    eBullets.update();
     mine.update();
+    eBullets.draw();
     FRAME++;
+    if(FRAME % 100 == 0)eBullets.list.push(new GuidedBullet(0,0,1,1,mine));
+    if(FRAME > 900)FRAME = 0;
   },4);
 }
 
@@ -38,12 +43,14 @@ function init() {
       case 88:
         mine.shot = false;
         break;
+      case 90:
+        mine.nshot = false;
+        break;
       default:
         break;
     }
   }
   window.onkeydown= function (e) {
-   console.log(e.keyCode);
     switch(e.keyCode){
       case 38:
         mine.vy = -SHIP_VELOCITY;
@@ -61,7 +68,7 @@ function init() {
         mine.shot = true;
         break;
       case 90:
-        mine.n_way_shot(5);
+        mine.nshot = true;
         break;
       default:
         break;
